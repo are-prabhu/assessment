@@ -1,0 +1,44 @@
+---     
+
+  - name: "install all packages"
+    sudo: yes
+    apt: state=installed update_cache=yes name={{item}}
+    with_items:
+        - vim
+        - wget
+        - curl
+        - libmysqlclient-dev
+        - python-dev
+        - python-pip
+        - runit
+
+  - name: "install pip"
+    command: pip install MySQL-python
+    sudo: yes
+
+  - name: update apt repo
+    action: apt update-cache=yes
+    sudo: yes
+ 
+      
+  - name: install mysql-server 
+    action: apt name=mysql-server state=installed
+    sudo: yes
+
+  - name: write my.cnf 
+    action: template src='roles/mysql/files/my.cnf.j2' dest='/etc/mysql/conf.d/mysqld-ansible.cnf'
+    sudo: yes
+    notify:
+      - restart mysql 
+
+  - name: service mysql  
+    action: service name=mysql state=started 
+    sudo: yes
+
+  - mysql_user: name={{mysql_user1}} password={{mysql_user1_passwd}} priv=*.*:ALL state=present
+    sudo: yes
+
+  - mysql_user: name={{mysql_user2}} password={{mysql_user2_passwd}} priv=*.*:ALL state=present
+    sudo: yes
+
+

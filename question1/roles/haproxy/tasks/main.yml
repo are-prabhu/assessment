@@ -1,0 +1,37 @@
+
+
+- name: "install required packages"
+  sudo: yes
+  apt: state=present update_cache=yes name={{item}}
+  with_items:
+      - vim
+      - wget
+      - curl
+      - python-pip
+      - runit
+      - haproxy
+
+
+- name: Enable init script
+  replace: dest='/etc/default/haproxy' 
+         regexp='ENABLED=0'
+         replace='ENABLED=1'
+  sudo: yes
+
+- name: Copy HAProxy configuration in place.
+  template:
+    src: roles/haproxy/files/haproxy.cfg.j2
+    dest: /etc/haproxy/haproxy.cfg
+    mode: 0644
+    validate: haproxy -f %s -c -q
+  notify: restart haproxy
+  sudo: yes
+
+- name: start haproxy
+  copy:
+    src: roles/haproxy/files/run
+    dest: /etc/service/{{role_path|basename}}/
+    mode: 0777
+  sudo: yes
+  
+

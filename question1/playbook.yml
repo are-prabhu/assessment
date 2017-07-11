@@ -1,0 +1,25 @@
+---
+
+- hosts: webapp1.imsudo.com
+  roles:
+    - webapp
+
+- hosts: webapp3.imsudo.com
+  roles:
+    - webapp
+
+- hosts: webapp2.imsudo.com
+  roles:
+    - webapp
+
+- hosts: webapp4.imsudo.com
+  roles:
+    - webapp
+
+- hosts: haproxy.imsudo.com
+  roles:
+    - haproxy
+
+- hosts: mysql.imsudo.com
+  roles:
+    - mysql

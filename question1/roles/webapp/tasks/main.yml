@@ -1,0 +1,53 @@
+
+
+- name: "install python pip"
+  sudo: yes
+  apt: state=present update_cache=yes name={{item}}
+  with_items:
+      - vim
+      - wget
+      - curl
+      - python-dev
+      - python-pip
+      - libmysqlclient-dev
+      - runit
+      - mysql-client
+
+- name: "install pip flask"
+  pip: name="flask"
+  sudo: yes
+
+- name: "install requests"
+  pip: name="requests"
+  sudo: yes
+
+- name: "install pip"
+  command: pip install MySQL-python
+  sudo: yes
+
+- name: "copy app"
+  copy:
+    src: roles/webapp/files/webapp.tgz
+    dest: /opt
+  sudo: yes
+  register: app_deploy
+
+- name: "untar app"
+  shell: tar -xzvf /opt/webapp.tgz -C /opt 
+  sudo: yes
+
+- name: "Creates service directory"
+  file:
+    path: /etc/service/{{role_path|basename}}
+    state: directory
+    mode: 0775
+    recurse: yes
+  sudo: yes
+
+- name: "copy runit scripts"
+  copy:
+    src: roles/webapp/files/run
+    dest: /etc/service/{{role_path|basename}}/
+    mode: 0777
+  sudo: yes
+

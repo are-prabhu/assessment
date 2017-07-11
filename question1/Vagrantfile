@@ -1,0 +1,63 @@
+
+BRIDGE_NET="192.168.1."
+INTERNAL_NET="192.168.15."
+DOMAIN="imsudo.com"
+
+servers=[
+  {
+    :hostname => "haproxy." + DOMAIN,
+    :ip => BRIDGE_NET + "150",
+    :ip_int => "1",
+    :ram => 256,
+  },
+  {
+    :hostname => "webapp1." + DOMAIN,
+    :ip => BRIDGE_NET + "151",
+    :ip_int => "2",
+    :ram => 256,
+  },
+  {
+    :hostname => "webapp2." + DOMAIN,
+    :ip => BRIDGE_NET + "152",
+    :ip_int => "3",
+    :ram => 256,
+  },
+  {
+    :hostname => "webapp3." + DOMAIN,
+    :ip => BRIDGE_NET + "153",
+    :ip_int => "4",
+    :ram => 256,
+  },
+  {
+    :hostname => "webapp4." + DOMAIN,
+    :ip => BRIDGE_NET + "154",
+    :ip_int => "5",
+    :ram => 256,
+  },
+  {
+    :hostname => "db." + DOMAIN,
+    :ip => BRIDGE_NET + "155",
+    :ip_int => "6",
+    :ram => 256,
+  }
+
+]
+ 
+Vagrant.configure(2) do |config|
+    config.vm.synced_folder ".", "/vagrant", disabled: true
+
+    servers.each do |machine|
+        config.vm.define machine[:hostname] do |node|
+            config.vm.provision :ansible do |ansible|
+              ansible.playbook = "playbook.yml"
+              node.vm.box = "ubuntu/trusty64"
+              node.vm.hostname = machine[:hostname]
+              node.vm.network "public_network", ip: machine[:ip], bridge: "en1: Wi-Fi (AirPort)"
+              node.vm.provider "virtualbox" do |vb|
+                vb.customize ["modifyvm", :id, "--memory", machine[:ram]]
+                vb.customize ["modifyvm", :id, "--name", "machine[:hostname]"]
+              end
+            end
+        end
+    end
+end

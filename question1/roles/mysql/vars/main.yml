@@ -1,0 +1,11 @@
+---
+
+  root_password: test  
+
+  mysql_user1: test1
+  mysql_user1_passwd: test1
+
+  mysql_user2: test2
+  mysql_user2_passwd: test2
+
+

@@ -1,0 +1,15 @@
+---
+
+  haproxy_app_name: webapp
+  haproxy_mode: http
+  haproxy_enable_stats: enable 
+  haproxy_algorithm: roundrobin
+  haproxy_backend_servers:
+    - {name: webapp1.imsudo.com, ip: 192.168.1.151, port: 80, paramstring: cookie A check}
+    - {name: webapp2.imsudo.com, ip: 192.168.1.152, port: 80, paramstring: cookie A check}
+    - {name: webapp3.imsudo.com, ip: 192.168.1.153, port: 80, paramstring: cookie A check}
+    - {name: webapp4.imsudo.com, ip: 192.168.1.154, port: 80, paramstring: cookie A check}
+  haproxy_stats_users:
+    - {username: assessment, password: assessment}
+
+
