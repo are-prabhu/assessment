@@ -1,16 +1,18 @@
 
-###Question 1 Usage:
+### Question 1 Usage:
 
 ```
 git clone git@github.com:are-prabhu/assessment.git
 cd assessment/question1	
+vagrent init
 vagrent up
 ```
 
 
-###Question 2 Usage:
+### Question 2 Usage:
 
 ```
+git clone git@github.com:are-prabhu/assessment.git
 cd assessment/question2
 chmod +x custom_mtr.py
 pip3 install -r requirement.txt	
